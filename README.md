@@ -5,7 +5,7 @@
 - [x] Repositorio creado
 - [ ] Equipo invitado a GitHub y a Supabase
 - [ ] Conexión a Supabase probada por cada integrante
-- [ ] CSV cargados a raw (sin limpiar)
+- [x] CSV cargados a raw (sin limpiar)
 
 ## Fase 2: Calidad de datos (A1)
 - [ ] Auditoría por dataset (nulos, duplicados, outliers, huérfanos)
