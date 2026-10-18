@@ -1,6 +1,7 @@
 .env
 .streamlit/secrets.toml
-.venv/
+.venv*/
+.vscode/
 __pycache__/
 .ipynb_checkpoints/
 *.duckdb
