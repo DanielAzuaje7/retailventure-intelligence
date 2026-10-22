@@ -6,3 +6,4 @@ __pycache__/
 .ipynb_checkpoints/
 *.duckdb
 data/raw/*.csv
+data/clean/*.csv
