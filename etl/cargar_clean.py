@@ -128,4 +128,21 @@ with engine.connect() as con:
     )).fetchone()
 print(f"\nIngreso neto total: {ingreso:,}  (esperado 17,392,987.48)")
 print(f"Margen bruto total: {margen:,}  (esperado 4,310,329.05)")
+
+# 7. Permisos de solo lectura (el drop schema borró los anteriores)
+with engine.begin() as con:
+    existe = con.execute(text(
+        "select 1 from pg_roles where rolname = 'dashboard_ro'"
+    )).scalar()
+    if existe:
+        con.execute(text("grant usage on schema raw, clean, auditoria to dashboard_ro"))
+        con.execute(text("grant select on all tables in schema raw, clean, auditoria to dashboard_ro"))
+        con.execute(text(
+            "alter default privileges in schema clean, auditoria "
+            "grant select on tables to dashboard_ro"
+        ))
+        print("Permisos de solo lectura aplicados a dashboard_ro.")
+    else:
+        print("Aviso: no existe dashboard_ro. Ejecuta sql/00_esquemas.sql primero.")
+
 print("\nCarga terminada. Revisa en Supabase los esquemas clean y auditoria.")
