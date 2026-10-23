@@ -8,11 +8,11 @@
 - [x] CSV cargados a raw (sin limpiar)
 
 ## Fase 2: Calidad de datos (A1)
-- [ ] Auditoría por dataset (nulos, duplicados, outliers, huérfanos)
-- [ ] Decisiones de limpieza documentadas
-- [ ] Modelo relacional / esquema estrella
-- [ ] Métricas de calidad (completitud, consistencia, unicidad, oportunidad)
-- [ ] Definición de métricas del negocio (margen, CLV, churn, conversión, ROI)
+- [x] Auditoría por dataset (nulos, duplicados, outliers, huérfanos)
+- [ ] Decisiones de limpieza documentadas (redactadas en notebook; falta docs/decisiones_limpieza.md)
+- [x] Modelo relacional / esquema estrella (implementado en Supabase; falta diagrama visual)
+- [x] Métricas de calidad (completitud, consistencia, unicidad, oportunidad)
+- [x] Definición de métricas del negocio (propuesta en docs/definiciones_metricas.md)
 
 ## Fase 3: Análisis (A2, A3, A4)
 - [ ] A2: rentabilidad, CLV, estacionalidad, efecto de descuentos
