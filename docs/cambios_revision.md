@@ -51,3 +51,7 @@ Rama: `revision-externa-a2-a4`.
 | C7 | Descomposición del ticket por categoría (nueva) | no existía | −$6.80 = mezcla −$0.93 + precio −$5.87 | A2 |
 | C7 | Descomposición del ticket por canal (nueva) | no existía | −$6.80 = mezcla +$0.18 + precio −$6.97 | A2 |
 | C7 | Aporte de Inactivo al ticket global | `main`: −0.14 p.p. (variación % × peso, escrito a mano) | −0.15 puntos (efecto precio / ticket 2023) | A2 |
+| C8 | Picos y valles estacionales | 066777b: "Pico Q4 (Black Friday/Navidad)" y "Valle Q1" sombreados | picos en ambos años: ninguno; valle: febrero, que desaparece con ingreso por día | A2 |
+| C8 | Correlación del índice estacional 2023 vs 2024 | `main`: r = 0.275 sin p-valor | r = 0.275, p = 0.387 | A2 |
+| C8 | Correlación por categoría y canal (nueva para canal) | solo matrices por categoría, sin correlación | 0 de 9 grupos con correlación significativa entre años | A2 |
+| C8 | Eje Y de las gráficas de estacionalidad | 650 a 800 mil (066777b) | desde 0 | A2 |
