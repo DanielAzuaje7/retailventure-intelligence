@@ -93,3 +93,5 @@ Rama: `revision-externa-a2-a4`.
 | C16 | Decisión de quejas no resueltas | "pendiente de validar" en el markdown | opción B adoptada (`sin_resolver` + `escalado`) | A3 |
 | C17 | Explicación de las ventas bajo costo | "711 transacciones"; "se debió exclusivamente a descuentos excesivos" (afirmado) | calculado: descuento 19.6% vs 5.0%; margen natural 15.0% vs 34.6%; 100% con descuento mayor que el margen natural | A2 |
 | C17 | Títulos con conclusión anticipada | "Ganadoras vs. Destructoras de Margen"; A4.2 "(5% a 25%)" afirmativo | "mayor y menor margen"; A4.2 formulada como pregunta | A2, A4 |
+| C18 | Margen en `cruce_margen` y `sub_summary` | ya ponderado en `main` (066777b: promedio de margen_pct_real por transacción) | Σmargen/Σingreso, sin cambios en esta rama | A2 |
+| C18 | Margen por canal: promedio simple vs ponderado (referencia) | simple: 31.52% / 28.51% / 31.58% (app / online / tienda) | ponderado: 25.91% / 22.78% / 26.02% | A2 |
