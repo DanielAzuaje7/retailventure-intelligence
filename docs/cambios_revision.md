@@ -70,3 +70,8 @@ Rama: `revision-externa-a2-a4`.
 | C12 | Clientes con ≥ 2 devoluciones: observados vs esperados | 1,711 vs 1,707.6 | sin cambio; se agrega la distribución completa (0, 1, 2, 3, 4+) | A3 |
 | C12 | Recurrentes anómalos | 20 (solo p < 0.01) | 54 (20 por p < 0.01, 47 por ≥ 3 dev. con tasa ≥ 40% y ≥ 4 compras, 13 ambos) | A3 |
 | C12 | Esperados por azar con cada criterio (nuevo) | no se reportaba | 22.2 (p < 0.01) y 57.9 (criterio de tasa): sin exceso sobre el azar | A3 |
+| C13 | Tendencia de la tasa de devolución (nueva) | no se probaba | OR por 12 meses = 1.008, IC [0.964, 1.054], p = 0.727 (sin tendencia) | A3 |
+| C13 | Último trimestre vs anteriores (nueva) | no se probaba | 13.45% vs 13.45%, p = 0.994 (no se reproduce el 14%) | A3 |
+| C13 | Tasa con ventana de devolución incompleta | 13.45% igual a la global, sin explicación | 13.43% vs 13.45%; 158 de 276 devoluciones fechadas el 2024-12-31 (fechas recortadas en origen) | A3 |
+| C13 | Texto de Ropa | "mayor TASA (0.0%), dominada por Talla_incorrecta y No_cumple_expectativas" | 21.78%; motivos principales Producto_defectuoso 28.3% y No_cumple_expectativas 22.7% | A3 |
+| C13 | Motivo × categoría sin Talla_incorrecta (nueva) | no existía | Chi2 = 84.66, p < 0.001 | A3 |
