@@ -82,3 +82,7 @@ Rama: `revision-externa-a2-a4`.
 | C14 | CLV Nuevo | 125.06 | 113.25 → 124.40 | A2 |
 | C14 | CLV Inactivo | 46.42 | 82.14 → 78.17 | A2 |
 | C14 | Segmentos en declive (nuevo) | no se identificaban | Frecuente (clientes −0.08%, margen/cliente −1.00%) e Inactivo (−2.47%, −4.83%) | A2 |
+| C15 | Conversión por canal de envío (nueva) | no existía | validada: email 2.34%, push_app 2.03%, sms 1.63%, redes_sociales 1.58% | A4 |
+| C15 | Combinaciones analizadas | tipo × canal × segmento (24 de 25 con ≥ 100 envíos) | tipo × segmento (24 de 25) y canal × segmento (19 de 20); cada tipo usa un único canal | A4 |
+| C15 | Conversión validada por segmento | calculada con todos los envíos: Nuevo 0.43%, Inactivo 0.16% | con ventana completa: Nuevo 0.45%, Inactivo 0.17% | A4 |
+| C15 | Segmentos que reciben campañas y no convierten | Nuevo e Inactivo, 24.6% de los envíos, sin datos de respaldo para la hipótesis | Nuevo e Inactivo, 24.6%; compran en 30 días 5.80% y 3.30%; mismo descuento (12.30% vs 12.47%); declarada 24× y 32× la validada | A4 |
