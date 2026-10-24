@@ -46,3 +46,8 @@ Rama: `revision-externa-a2-a4`.
 | C6 | Quejas excluidas por ventana truncada (W = 40 días) | no se excluían en 066777b | 221 | A3 |
 | C6 | DiD con ventana 1.5W (60 días) | `main`: +0.0035 (exclusión de 40 días) | −0.0189, IC [−0.1349, +0.1002], p = 0.752 (343 quejas excluidas) | A3 |
 | C6 | Clientes en riesgo con queja no resuelta | `main`: 100 de 1,016 (9.84%) vs 9.03%, p = 0.434 (churn con respaldo P75) | 246 de 2,407 (10.22%) vs 514 de 5,201 (9.88%), p = 0.648 (churn C+B del equipo) | A3 |
+| C7 | Afirmación sobre el −8% del ticket | 066777b: "concentrada exactamente en el segmento Inactivo" | los datos no reproducen el −8%; ticket global −1.94% (Welch p = 0.132, nuevo) | A2 |
+| C7 | Descomposición del ticket por segmento (nueva) | no existía | −$6.80 = mezcla −$0.02 + precio −$6.78 | A2 |
+| C7 | Descomposición del ticket por categoría (nueva) | no existía | −$6.80 = mezcla −$0.93 + precio −$5.87 | A2 |
+| C7 | Descomposición del ticket por canal (nueva) | no existía | −$6.80 = mezcla +$0.18 + precio −$6.97 | A2 |
+| C7 | Aporte de Inactivo al ticket global | `main`: −0.14 p.p. (variación % × peso, escrito a mano) | −0.15 puntos (efecto precio / ticket 2023) | A2 |
