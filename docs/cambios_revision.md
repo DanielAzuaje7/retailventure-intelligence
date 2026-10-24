@@ -98,3 +98,6 @@ Rama: `revision-externa-a2-a4`.
 | C19 | Fuente de datos de A2 y A4 | CSV locales de data/clean | esquema `clean` de Supabase en solo lectura (CSV como alternativa comentada) | A2, A4 |
 | C19 | Lectura de A3 | Supabase sin orden fijo ni bloqueo de escritura | Supabase en solo lectura, ordenado por clave primaria | A3 |
 | C19 | Cifras de control impresas | A2 y A3 (A4 no las imprimía) | A2, A3 y A4: ingreso 17,392,987.48 y margen 4,310,329.05 (assert en A2 y A4) | A2, A3, A4 |
+| C20 | Margen del top 20% de clientes | 56.1% (leía la fila del cliente 1,522) | 56.0% (1,521 clientes) | A2 |
+| C20 | Clientes que concentran el 80% del margen | 2,893 (índice, no conteo) | 2,894 = 38.0% de los 7,608 con compras (36.2% sobre los 8,000) | A2 |
+| C20 | Aclaración del denominador | markdown con 7,608 / 8,000 / 392 escritos a mano | markdown sin cifras; conteos impresos y en el eje X | A2 |
