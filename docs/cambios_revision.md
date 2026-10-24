@@ -59,3 +59,7 @@ Rama: `revision-externa-a2-a4`.
 | C9 | Canasta ~ descuento (OLS con controles) | coef +0.0377, p = 0.6408 (errores clásicos) | coef +0.0377, IC 95% [−0.1218, +0.1972], p = 0.643 (HC1) | A2 |
 | C9 | Margen % ~ descuento (OLS con controles) | coef −82.47, p < 0.001 | coef −82.47, IC 95% [−83.36, −81.59], p < 0.001 (HC1) | A2 |
 | C9 | Punto de equilibrio | 066777b: +227% para 20% (markdown, m ≈ 28.8% a mano); `main`: no existía | 5% → +21.0%, 10% → +53.1%, 15% → +108.6%, 20% → +226.9%, 25% → +655.2% (m = 28.82%, calculado) | A2 |
+| C10 | Nombre del cruce canal × categoría | "Cruce Causal" | "Cruce descriptivo" (introducción y sección 4) | A2 |
+| C10 | Margen de tienda física en el resumen | `main`: 31.51% (promedio simple de categorías) | 26.02% (margen ponderado del canal) | A2 |
+| C10 | Brecha actual de margen tienda − online (nueva) | no se imprimía | 3.25 p.p. (≈ $212,647.56) | A2 |
+| C10 | Contrafactual online con descuento de tienda | +3.14 p.p. (+$277,632.43) | sin cambio; se agrega que explica el 97% de la brecha y se presenta como tope | A2 |
