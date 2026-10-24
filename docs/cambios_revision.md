@@ -67,3 +67,6 @@ Rama: `revision-externa-a2-a4`.
 | C11 | Productos con p < 0.05 sin corregir (nuevo) | no se reportaba | 9 de 318 (≈ 16 esperados por azar) | A3 |
 | C11 | Productos con exceso significativo tras BH | 0 | 0 (menor q = 0.580, PRD0095) | A3 |
 | C11 | Ranking de productos | 066777b: por monto devuelto | tasa vs. resto de categoría con IC de Wilson; ranking por monto como complemento | A3 |
+| C12 | Clientes con ≥ 2 devoluciones: observados vs esperados | 1,711 vs 1,707.6 | sin cambio; se agrega la distribución completa (0, 1, 2, 3, 4+) | A3 |
+| C12 | Recurrentes anómalos | 20 (solo p < 0.01) | 54 (20 por p < 0.01, 47 por ≥ 3 dev. con tasa ≥ 40% y ≥ 4 compras, 13 ambos) | A3 |
+| C12 | Esperados por azar con cada criterio (nuevo) | no se reportaba | 22.2 (p < 0.01) y 57.9 (criterio de tasa): sin exceso sobre el azar | A3 |
