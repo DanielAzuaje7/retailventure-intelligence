@@ -63,3 +63,7 @@ Rama: `revision-externa-a2-a4`.
 | C10 | Margen de tienda física en el resumen | `main`: 31.51% (promedio simple de categorías) | 26.02% (margen ponderado del canal) | A2 |
 | C10 | Brecha actual de margen tienda − online (nueva) | no se imprimía | 3.25 p.p. (≈ $212,647.56) | A2 |
 | C10 | Contrafactual online con descuento de tienda | +3.14 p.p. (+$277,632.43) | sin cambio; se agrega que explica el 97% de la brecha y se presenta como tope | A2 |
+| C11 | Referencia de cada producto | tasa de la categoría completa (incluye al producto) | tasa del resto de la categoría | A3 |
+| C11 | Productos con p < 0.05 sin corregir (nuevo) | no se reportaba | 9 de 318 (≈ 16 esperados por azar) | A3 |
+| C11 | Productos con exceso significativo tras BH | 0 | 0 (menor q = 0.580, PRD0095) | A3 |
+| C11 | Ranking de productos | 066777b: por monto devuelto | tasa vs. resto de categoría con IC de Wilson; ranking por monto como complemento | A3 |
