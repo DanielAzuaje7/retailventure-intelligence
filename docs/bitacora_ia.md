@@ -4,7 +4,7 @@
 
 Esta bitácora registra cada uso de herramientas de IA generativa en el proyecto, indicando qué se **aceptó, ajustó o rechazó**, por qué, y **cómo se validó técnicamente**. La rúbrica valora el juicio crítico sobre la IA, no la aceptación ciega.
 
-**Última actualización:** 24 de octubre de 2026 · **Herramienta usada hasta ahora:** Claude (claude.ai) / Antigravity IDE
+**Última actualización:** 24 de octubre de 2026 · **Herramienta usada hasta ahora:** Claude (claude.ai) / Antigravity IDE / Claude Code (revisión externa, entradas 046 a 065)
 
 ## Reglas de uso
 
