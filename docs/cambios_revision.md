@@ -32,3 +32,7 @@ Rama: `revision-externa-a2-a4`.
 | C3 | Conclusión de A4.3 | "la causa raíz es post-venta" | sin diferencia significativa en ningún indicador | A4 |
 | C3 | Segmento × conversión (nueva) | no existía | Chi2 = 46.83, p = 1.65e-09 | A4 |
 | C3 | Devoluciones con conversión validada (nueva) | no existía | 44.01% vs 69.46% (p = 8.2e-11); por cada 100 compras 13.41 vs 12.44 | A4 |
+| C4 | Modelo de conversión vs descuento | en `main`: logit con descuento continuo, OR = 26.711 por unidad de descuento | logit con descuento categórico: OR vs 0% = 1.36 / 1.78 / 2.20 / 2.38 / 2.36 (5% a 25%) | A4 |
+| C4 | Contraste 25% vs 20% | bruto 11.42% vs 11.39%, chi-cuadrado p = 1.000 | ajustado por segmento y tipo: OR = 0.993, IC 95% [0.789, 1.249], p = 0.952 | A4 |
+| C4 | Contraste 25% vs 20% con conversión validada (nuevo) | no existía | OR = 1.240, IC 95% [0.779, 1.975], p = 0.364 | A4 |
+| C4 | Conclusión de A4.2 | 066777b: "punto de saturación en >20%"; `main`: "rendimientos decrecientes y estancamiento" | rendimientos decrecientes posibles, no concluyente | A4 |
