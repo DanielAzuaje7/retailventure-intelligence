@@ -95,3 +95,6 @@ Rama: `revision-externa-a2-a4`.
 | C17 | Títulos con conclusión anticipada | "Ganadoras vs. Destructoras de Margen"; A4.2 "(5% a 25%)" afirmativo | "mayor y menor margen"; A4.2 formulada como pregunta | A2, A4 |
 | C18 | Margen en `cruce_margen` y `sub_summary` | ya ponderado en `main` (066777b: promedio de margen_pct_real por transacción) | Σmargen/Σingreso, sin cambios en esta rama | A2 |
 | C18 | Margen por canal: promedio simple vs ponderado (referencia) | simple: 31.52% / 28.51% / 31.58% (app / online / tienda) | ponderado: 25.91% / 22.78% / 26.02% | A2 |
+| C19 | Fuente de datos de A2 y A4 | CSV locales de data/clean | esquema `clean` de Supabase en solo lectura (CSV como alternativa comentada) | A2, A4 |
+| C19 | Lectura de A3 | Supabase sin orden fijo ni bloqueo de escritura | Supabase en solo lectura, ordenado por clave primaria | A3 |
+| C19 | Cifras de control impresas | A2 y A3 (A4 no las imprimía) | A2, A3 y A4: ingreso 17,392,987.48 y margen 4,310,329.05 (assert en A2 y A4) | A2, A3, A4 |
