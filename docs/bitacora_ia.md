@@ -1,0 +1,94 @@
+# Bitácora de uso de IA
+
+**Proyecto 01: Retail Intelligence (RetailVenture C.A.)** · Tópicos Especiales para la Gestión de Datos · Grupo 3
+
+Esta bitácora registra cada uso de herramientas de IA generativa en el proyecto, indicando qué se **aceptó, ajustó o rechazó**, por qué, y **cómo se validó técnicamente**. La rúbrica valora el juicio crítico sobre la IA, no la aceptación ciega.
+
+**Última actualización:** 24 de octubre de 2026 · **Herramienta usada hasta ahora:** Claude (claude.ai) / Antigravity IDE
+
+## Reglas de uso
+
+1. Se registra **en el momento**, no al final del proyecto.
+2. Cada integrante anota sus propias entradas con su nombre.
+3. La columna **Validación técnica** solo contiene lo que **realmente se comprobó**. Si algo no se ha verificado todavía, se escribe "Pendiente" y se completa cuando se verifique.
+4. Otro integrante revisa las entradas cada semana y marca si la validación es creíble.
+5. Cada integrante debe poder explicar sin ayuda cualquier código o decisión registrada aquí.
+
+---
+
+## Registro
+
+### Entradas del 17 de octubre de 2026 (Daniel)
+
+| ID | Actividad | Objetivo y prompt (resumen) | Resumen de la respuesta de la IA | Decisión | Justificación | Validación técnica |
+|---|---|---|---|---|---|---|
+| 001 | Organización | Qué herramientas usar para el proyecto con un equipo de 5 personas | Python (pandas, Plotly, statsmodels), DuckDB local, Streamlit, GitHub y un plan por fases | **Ajustado** | Se mantuvieron Python, Plotly y GitHub. Se reemplazó DuckDB local por Supabase (base compartida en la nube) por preferencia del equipo y experiencia previa con Supabase. DuckDB queda como plan de respaldo | Se contrastó con el enunciado: el equipo tiene libertad de elegir herramientas |
+| 002 | Organización | Por qué Python y no solo SQL con Power BI | Es viable, pero Power BI limita el análisis de causalidad, la reproducibilidad y la colaboración (cada integrante replica la conexión) | **Aceptado** | La rúbrica penaliza correlaciones sin causalidad y se busca una sola base compartida sin configurar conexiones por máquina | Contrastado con la rúbrica del enunciado (criterio de profundidad analítica) |
+| 003 | Organización | Se puede hacer todo con Python y SQL puro, con un dashboard bonito y fácil de personalizar | Arquitectura SQL + pandas + Plotly + Streamlit; Quarto como alternativa narrativa | **Aceptado, aplazado** | Streamlit se construirá en la fase de storytelling, después del análisis | Pendiente: aún no se ha construido ni probado el dashboard |
+| 004 | Organización | Colaboración sin replicar la base en cada computador | La IA propuso primero Postgres en la nube; luego el usuario señaló que DuckDB como archivo evita configurar conexiones, y la IA reconoció que había complicado la solución | **Ajustado** | Se decidió Supabase como base principal (trabajo en la nube, experiencia previa del equipo) y DuckDB como respaldo | Se discutió y comparó explícitamente por el equipo; la conexión a Supabase se probó (ver 012) |
+| 005 | Organización | ¿El proyecto exige entregar en notebooks? | No es obligatorio; se recomienda separar la lógica (scripts y módulos) de la narrativa (notebooks) | **Aceptado** | Coincide con el enunciado | Se contrastó con el texto del enunciado: no menciona notebooks y permite elegir herramientas |
+| 006 | Organización | Lista separada de librerías de Python, herramientas de desarrollo y herramientas administrativas | Tres tablas con pandas, SQLAlchemy, psycopg, python-dotenv, scipy, statsmodels, plotly, streamlit, etc. | **Aceptado** | Es la base del `requirements.txt` | Parcial: pandas, SQLAlchemy, psycopg y python-dotenv se instalaron y funcionan (ver 012 y 014). El resto, pendiente |
+| 007 | Organización | Si todo el stack es gratuito y qué límites tienen los planes | La IA hizo búsquedas web: Supabase gratuito con 500 MB de base, 5 GB de transferencia y pausa tras una semana sin actividad; Streamlit Cloud con apps que se duermen tras 12 horas y una sola app privada | **Aceptado con verificación pendiente** | Afecta la planificación de la defensa. Las fuentes no coincidían en si el límite de proyectos es por cuenta o por organización | Parcial: el panel *Free plan usage* del proyecto muestra límites de 500 MB y 5 GB, consistentes con lo dicho. Pendiente: confirmar el resto en supabase.com/pricing y docs.streamlit.io |
+| 008 | Organización | Cómo dar acceso al equipo en Supabase y liberar el cupo gratuito del proyecto viejo | Invitar por organización (no compartir la cuenta), crear una organización nueva; el `DROP` no libera el cupo, hay que pausar o eliminar el proyecto | **Aceptado** | Los miembros de una organización ven todos sus proyectos, así que conviene una organización solo para este proyecto | Pendiente: las invitaciones al equipo aún no se han enviado |
+| 009 | A1 (montaje) | Ajustes al crear el proyecto de Supabase (captura del formulario) | Desactivar la Data API y la exposición automática de tablas porque se conecta directo a PostgreSQL; región de EE. UU. del este | **Aceptado** | Se usa SQLAlchemy y no librerías cliente de Supabase | El panel muestra el proyecto en estado Healthy en East US (North Virginia) y la conexión directa funciona. Pendiente: confirmar en la configuración que la Data API quedó desactivada |
+| 010 | A1 (montaje) | Interpretar consumo inicial y errores 404/400 en los logs del proyecto nuevo | Es normal: servicios internos de Supabase y comprobaciones de la propia infraestructura | **Aceptado** | El proyecto está Healthy y no hay acción que tomar | Parcial: se interpretó a partir de capturas, sin contrastar con la documentación; el proyecto responde a consultas (ver 012) |
+| 011 | Organización | Guías en Markdown/PDF: arranque del equipo, bitácora, estructura del repositorio, configuración | Estructura de carpetas, `.gitignore`, `.env.example`, plantillas | **Ajustado** | Se agregaron `data/raw/*.csv`, `.venv*/` y `.vscode/` al `.gitignore`. La IA corrigió que proteger la rama `main` puede no estar disponible en repositorios privados gratuitos | Se creó la estructura y se subió a GitHub. Se verificó con `git check-ignore -v .env` que el `.env` queda ignorado |
+| 012 | A1 (montaje) | Obtener la cadena del *Session pooler* y probar la conexión desde Python | Usar `postgresql+psycopg://` con el usuario `postgres.[ref]`, el host del pooler y el puerto 5432; script `etl/probar_conexion.py` | **Aceptado, con ajuste** | Los corchetes de las plantillas eran marcadores y no debían escribirse | Se ejecutó `python etl/probar_conexion.py`: devolvió la base `postgres`, el usuario y la hora del servidor |
+| 013 | Organización | Flujo de Git: primer push, uso del panel de VS Code, push rechazado y merge | Explicó el rechazo (`fetch first`), el `pull` y el nuevo `push`; recomendó revisar `git status` y `git log` | **Aceptado** | Es el procedimiento estándar de Git | Parcial: el log de Git muestra el merge `68d22e3` sin conflictos y el push exitoso. Pendiente: confirmar con `git status` y `git show --stat 16bed39` qué contenía el commit remoto |
+| 014 | A1 (carga) | Cómo cargar los CSV a Supabase sin modificarlos | Script `etl/cargar_csv.py`: todo como texto, solo las celdas vacías como NULL, sin llaves primarias; esquema `raw` como copia fiel | **Aceptado** | Permite detectar los problemas de calidad en la auditoría y rehacer la limpieza sin perder los originales | Se ejecutó el script: las 6 tablas se cargaron y los conteos coinciden con los CSV (8,000; 50,000; 318; 6,724; 4,684; 8,820). El esquema `raw` es visible en Supabase |
+| 015 | A1 (diseño) | Cómo se ejecuta y se relaciona todo el flujo | Flujo ELT: cargar a `raw`, limpiar con vistas SQL en `clean`, modelo estrella en `mart`; Streamlit solo lee `mart` | **Aceptado** | Mantiene los originales intactos, deja cada decisión de limpieza documentada en SQL y evita reprocesar en el computador | Pendiente: se validará al crear las primeras vistas de `clean`. Documentado en `flujo_de_trabajo_datos_retail_intelligence.md` |
+
+---
+
+### Entradas del 20 al 23 de octubre de 2026 (Daniel, Andrés y Samuel)
+
+| ID | Actividad | Objetivo y prompt (resumen) | Resumen de la respuesta de la IA | Decisión | Justificación | Validación técnica |
+|---|---|---|---|---|---|---|
+| 016 | A1 (reproducibilidad) | Comprobar si `A1_Auditoria_Calidad_Datos.ipynb` es reproducible en local sin depender de Colab ni de archivos externos | La IA creó un script de ejecución en memoria para probar el notebook leyendo de `data/raw/` y generando `data/clean/` | **Aceptado** | Garantiza la reproducibilidad del pipeline por cualquier miembro del equipo | Se ejecutó en local: generó los 9 CSV y las cifras de control coincidieron exactamente: Ingreso neto $17,392,987.48 y Margen bruto $4,310,329.05 |
+| 017 | A2 / A3 / A4 | Definir un contrato común de métricas para evitar inconsistencias entre integrantes | La IA propuso un árbol de descomposición de margen neto y redactó `docs/definiciones_metricas.md` clasificando métricas en impulsoras, diagnósticas y de control | **Aceptado** | La rúbrica penaliza contradicciones metodológicas entre los análisis del equipo | Se contrastaron las fórmulas con las columnas del esquema `clean` en Supabase |
+| 018 | A2 (rentabilidad) | Construir el análisis de contribución al margen A2.1 por categoría, canal y segmento | La IA generó el código inicial en `notebooks/02_A2_Rentabilidad.ipynb` calculando el margen bruto real y agregando un cruce causal entre canal y descuento | **Aceptado** | Cumple textualmente con A2.1 y la regla de no quedarse en lo descriptivo (Criterio 2) | Se ejecutó el notebook: Hogar y Deco aporta 31.4% del margen, Tienda Física 47.5%, y se demostró que el canal Online tiene menor margen (22.8% vs 26.0%) debido a que aplica el doble de descuento promedio (7.55% vs 3.73%) |
+| 019 | Entorno / A2 | Resolver `ModuleNotFoundError: No module named 'matplotlib'` al correr el notebook A2 | La IA identificó que faltaban `matplotlib` y `seaborn` en el `.venv`, los instaló y actualizó `requirements.txt` | **Aceptado** | Mantiene sincronizado el entorno para todo el equipo | Se ejecutó `test_notebook_a2.py`: el notebook corrió al 100% generando las salidas gráficas |
+| 020 | A2 (extensión) | Agregar análisis de alto valor a A2.1 sin tocar las secciones pendientes (A2.2 a A2.4) | La IA propuso e implementó: drill-down a subcategorías (ganadoras vs destructoras), rentabilidad por ciudad y la curva de Pareto (80/20) de clientes | **Aceptado** | Enriquece el storytelling ejecutivo de A5 y aporta pruebas cuantitativas sólidas | Se insertaron las celdas en `02_A2_Rentabilidad.ipynb`: Caracas aporta 39.1% del margen, Baño y Decoración generan >20% del margen total, y el 38% de los clientes concentra el 80% del margen |
+| 021 | A3 (auditoría de churn) | Auditoría metodológica de la definición de churn e inactividad en A3 | El equipo analizó si fijar el churn en la mediana (40 días) era adecuado para retail; se identificó que por definición el 50% de las recompras tardan más de 40 días, clasificando al 72.5% de los clientes en abandono | **Aceptado con ajuste** | Evita presentar una alarma sobredimensionada ante la gerencia | Se analizó la distribución de recompras: P50=40d, P75=87d, P85=127d, P90=162d. Se acordó adoptar un umbral relativo individual ($3 \times \text{mediana}$) con respaldo en P85 (127 días) |
+| 022 | A3 (fugas 6 meses) | Calibración metodológica de la proyección de fugas a 6 meses en A3 | Se detectó que calcular la proyección promediando únicamente meses con compras activas sobreestimaba el flujo mensual casi 4 veces | **Aceptado (Corrección metodológica)** | La cifra preliminar de $12.7M representaba casi el 75% de las ventas anuales de la empresa, lo cual era un supuesto irreal | Se corrigió la celda 36 en `A3_Retenciones_Churn_CRM.ipynb` usando división entre 12 meses calendario: la proyección corregida bajó a $2.18M (con corte base) y a ~$440k-$700k con umbrales P85-P90 |
+| 023 | A3 (CRM) | Criterio de clasificación de quejas no resueltas en CRM | El equipo evaluó los valores de resolución (`sin_resolver`, `escalado`, `resuelto`, `parcialmente_resuelto`) y acordó sumar `escalado` a `sin_resolver` | **Aceptado** | Desde la experiencia del cliente, un ticket escalado a supervisor sin cierre efectivo sigue siendo una queja insatisfecha | Se comentó en el código y texto de A3 la justificación metodológica para la bitácora y defensa |
+| 024 | A2 / A3 / A4 | Contrastar los 3 dolores del negocio del enunciado contra los datos empíricos de la BD | El equipo calculó las cifras reales: ticket interanual, tasa de devolución y caída de conversión de campañas | **Aceptado con hallazgo clave** | Permite fundamentar el inicio del storytelling con evidencia empírica | Se comprobó: las devoluciones son 13.5% (consistente con el 14%), la conversión cayó a la mitad (11.3% a 5.6%, idéntico al patrón 22%->11%), y el ticket general cayó −1.94%, pero en el segmento Inactivo cayó exactamente −8.03% |
+| 025 | A4 (diseño) | Definir reglas de atribución y cálculo de ROI de marketing antes de iniciar A4 | El equipo estableció: atribución al último contacto (Last-Touch) para no duplicar ventas, exclusión de campañas de diciembre 2024 por ventana incompleta, y usar la conversión declarada como principal y validada como control | **Aceptado** | Evita duplicar ingresos entre campañas concurrentes y aisla el sesgo de truncamiento temporal | Se formalizó en la versión 2.0 de `docs/definiciones_metricas.md` |
+| 026 | A2 y A3 (cierre técnico) | Completar A2 (CLV, estacionalidad y elasticidad) y calibrar A3 con las decisiones acordadas (C+B y quejas escaladas) | Se implementó en `02_A2_Rentabilidad.ipynb`: CLV trienal ($2,507 en Premium vs $102 en Inactivo), estacionalidad 2023 vs 2024 e inelasticidad de descuentos (volumen estancado en 1.78 unidades y 711 ventas bajo costo). En `A3_Retenciones_Churn_CRM.ipynb` se aplicó churn C+B ($3 \times W_i$ + P85 fallback) y quejas `escalado` | **Aceptado** | Alinea los tres notebooks al contrato de métricas y a las decisiones validadas con el usuario | Se ejecutaron ambos notebooks con `nbclient`: cero errores, 2,407 clientes en riesgo de churn ($635k fuga 6m) y tabla resumen ejecutiva completa para A5 |
+| 027 | A4 (construcción y ejecución) | Construir y ejecutar el notebook `04_A4_Marketing_ROI.ipynb` con el análisis causal de marketing | Se desarrolló el análisis de conversión (caída del 46% entre 2023-S1 y 2024-S2), saturación de descuentos en >20% en Esporádico, cruce de no conversión con quejas CRM (17.5% de fricción) y modelo Last-Touch a 30 días excluyendo dic-2024 | **Aceptado** | Explica causalmente el colapso del marketing solicitado en el caso de negocio | Se ejecutó el notebook con `nbclient`: cero errores, retorno de $733.8k atribuidos con ROI global de ingreso 7.91x y ROI margen 1.98x |
+
+---
+
+## Errores y limitaciones de la IA detectados
+
+Esta sección documenta el juicio crítico sobre las respuestas de la IA.
+
+| # | Qué falló | Cómo se detectó | Cómo se corrigió |
+|---|---|---|---|
+| 1 | La IA propuso primero una base en la nube (Postgres) para resolver un problema que un archivo (DuckDB) ya resolvía | El usuario cuestionó la propuesta | Se compararon ambas opciones y se eligió Supabase con DuckDB de respaldo |
+| 2 | La IA recomendó proteger la rama `main` sin advertir que puede no estar disponible en repositorios privados gratuitos | La IA lo corrigió más adelante al revisar la limitación | Se acordó como regla del equipo: nadie sube directo a `main` |
+| 3 | Las fuentes consultadas sobre el límite de proyectos gratuitos de Supabase no coincidían (por cuenta o por organización) | Contraste entre resultados de búsqueda | Se indicó la incertidumbre y se propuso probar creando el proyecto en la organización nueva |
+| 4 | La IA supuso que el commit no se había completado porque los archivos seguían apareciendo en el panel | El log de Git mostró que el commit y el push sí se habían hecho | Se corrigió la lectura con base en el log |
+| 5 | Una primera versión del script de carga dejaba que pandas adivinara los tipos de datos, lo que habría alterado los datos originales | Se revisó el objetivo de `raw` antes de ejecutar | Se cambió a leer todo como texto y a conservar los valores como `N/A` |
+| 6 | La IA supuso que las librerías gráficas (`matplotlib`, `seaborn`) ya estaban en el entorno virtual al crear el notebook A2 | Falló la ejecución en VS Code con `ModuleNotFoundError` | Se instalaron en el `.venv` y se registraron formalmente en `requirements.txt` |
+| 7 | Inicialmente la IA atribuyó los $12.7M de fuga proyectada en A3 exclusivamente al umbral de churn de 40 días | Al auditar la celda 37 se detectó que la causa matemática principal era promediar solo meses con compras en vez de meses calendario | Se corrigió la fórmula en el notebook dividiendo entre 12 meses calendario, reduciendo la proyección a una cifra realista ($2.18M) |
+| 8 | La IA reportó preliminarmente que el ticket promedio cayó −1.9% contradiciendo el enunciado (−8%) sin investigar el desglose | El usuario manifestó extrañeza por la contradicción con el PDF; al profundizar por segmentos, se descubrió que el segmento Inactivo cayó exactamente −8.03% | Se documentó que el dolor del −8% del enunciado se concentra en los clientes en abandono y no en la media global |
+
+---
+
+## Observaciones para la auditoría de calidad (A1)
+
+Estas observaciones surgen de la carga inicial. No son conclusiones: son puntos a verificar.
+
+- El enunciado menciona aproximadamente **320 productos** y el archivo `productos.csv` tiene **318**. Puede ser solo una aproximación del enunciado, pero conviene confirmarlo.
+- Los conteos de clientes (8,000) y transacciones (50,000) coinciden con lo que describe el enunciado.
+
+---
+
+## Plantilla para nuevas entradas
+
+| ID | Actividad | Objetivo y prompt (resumen) | Resumen de la respuesta de la IA | Decisión | Justificación | Validación técnica |
+|---|---|---|---|---|---|---|
+| 0XX | A1 / A2 / A3 / A4 / A5 / Organización | | | Aceptado / Ajustado / Rechazado | | Qué se comprobó realmente (se ejecutó, se comparó con un conteo, se leyó la documentación...) |
+
+Para cada entrada conviene agregar, si existe, la evidencia: enlace al commit, notebook o captura.

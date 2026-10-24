@@ -1,148 +1,127 @@
-# Definiciones de métricas del negocio
+# Definiciones de Métricas del Negocio (v2.0)
 
-> **Estado: PROPUESTA — pendiente de aprobación del equipo.**
-> Una métrica pasa a "aprobada" cuando al menos dos integrantes la revisan.
-> Cualquier cambio de fórmula se registra en la tabla de cambios al final.
-
-Objetivo: que A2, A3, A4 y el dashboard calculen **las mismas cifras con las mismas fórmulas**.
-Todas las métricas se calculan sobre el esquema `clean` de Supabase.
-
-- **Periodo de los datos:** 2023-01-01 a 2024-12-31 (24 meses).
-- **Fecha de corte (`FIN`):** 2024-12-31. Recencia y antigüedad se miden contra esta fecha.
-- **Comparación interanual:** 2024 vs. 2023.
+> **Estado: CONSENSO TÉCNICO Y CONTRATO DE MÉTRICAS (A2, A3, A4)**  
+> Documento unificado a partir de la propuesta inicial de Daniel y las observaciones metodológicas de A3.  
+> Garantiza que los tres análisis y el dashboard hablen el mismo idioma sin duplicaciones ni contradicciones.
 
 ---
 
-## 1. Cómo se eligieron: árbol de métricas
+## 1. El Marco Conceptual: Árbol de Métricas
 
-Las métricas no se eligen de una lista: salen de descomponer el problema del negocio
-hasta llegar a algo calculable con los datos.
+Para evitar métricas aisladas o de vanidad, todo el análisis se articula bajo la descomposición del Margen Neto:
 
 ```
-Margen neto (objetivo de la gerencia)
-├── Ingreso neto = Clientes activos × Frecuencia × Ticket promedio
-│     ├── Clientes activos  ◄── se pierden por churn                 (A3)
-│     ├── Frecuencia
-│     └── Ticket = Precio × (1 − Descuento) ◄── dolor 1: ticket −8%   (A2)
-├── − Costo → Margen bruto %  ◄── mezcla de categorías y canales     (A2)
-├── − Devoluciones            ◄── dolor 2: tasa de devolución 14%    (A3)
-└── − Costo comercial         ◄── dolor 3: conversión 22% → 11%      (A4)
+Margen Neto (Objetivo Gerencial)
+├── (+) Ingreso Neto = Clientes Activos × Frecuencia × Ticket Promedio
+│     ├── Clientes Activos  ◄── Se erosionan por CHURN (A3)
+│     ├── Frecuencia        ◄── Impactada por quejas no resueltas de CRM (A3)
+│     └── Ticket Promedio   ◄── Precio × (1 − Descuento aplicado) (A2)
+├── (−) Costo de Mercancía  ◄── Define el Margen Bruto % según categoría y canal (A2)
+├── (−) Devoluciones        ◄── Fuga directa de ingresos y margen (A3)
+└── (−) Costo Comercial     ◄── Descuentos promocionales y ROI de Campañas (A4)
 ```
 
-Cada métrica propuesta pasó este filtro:
+---
 
-1. ¿Qué decisión cambia si sube o baja? (si ninguna, se descarta)
-2. ¿Tiene una fórmula exacta, que dos personas calculen igual?
-3. ¿Se puede calcular con las columnas disponibles?
-4. ¿Tiene contra qué compararse (periodo, segmento, canal)?
-5. ¿Puede engañar? → se acompaña de una métrica de control.
+## 2. Diccionario Oficial de Métricas
 
-Roles:
+### 2.1 Rentabilidad y Ventas (`clean.transacciones`)
 
-| Rol | Para qué sirve | Ejemplos |
-|---|---|---|
-| KPI principal | Lo que la gerencia quiere mover | Margen neto, variación interanual |
-| Impulsoras | Las ramas del árbol | Ticket, frecuencia, clientes activos, devolución, conversión |
-| Diagnósticas | Explican el porqué | Motivo de devolución, quejas sin resolver, descuento promedio |
-| De control | Evitan optimizar mal | Margen % al evaluar descuentos; ROI al evaluar conversión |
+| Métrica | Definición / Fórmula | Columna(s) | Áreas que la usan |
+|---|---|---|---|
+| **Ingreso Bruto** | `Σ (cantidad × precio_unitario)` | `ingreso_bruto` | A2 |
+| **Ingreso Neto** | `Σ monto_neto` (Venta real facturada tras aplicar descuento) | `monto_neto` | **Todos** (Métrica canónica de facturación) |
+| **Descuento Aplicado** | Porcentaje de descuento efectivo en la transacción | `descuento` | A2 |
+| **Monto Descuento** | `Σ (ingreso_bruto − monto_neto)` | `monto_descuento` | A2, A4 |
+| **Margen Bruto ($)** | `Σ margen_bruto` (= `monto_neto − (cantidad × costo)`) | `margen_bruto` | A2, A3 |
+| **Margen Bruto (%)** | `Σ margen_bruto / Σ monto_neto` (Global de la empresa: 24.78%) | — | A2, A5 |
+| **Margen Neto Post-Devol.** | Margen bruto anulado si hubo devolución (`0` si `devuelto=1`) | `margen_neto_devol` | A2 (Control), A3 |
+| **Ingreso Neto Final** | `monto_neto − monto_devuelto` | `monto_neto_final` | A3 |
+| **Ticket Promedio** | `Σ monto_neto / COUNT(transaccion_id)` | `monto_neto` | A2, A5 |
+
+> ⚠️ **Regla de oro:** No confundir `transacciones.descuento` (descuento que realmente se cobró) con `campanas_marketing.descuento_ofrecido` (descuento que prometía la promoción publicitaria).
 
 ---
 
-## 2. Diccionario de métricas
+### 2.2 Clientes, Churn y CLV (`clean.clientes` + `clean.transacciones`)
 
-### 2.1 Rentabilidad (`clean.transacciones`)
-
-| Métrica | Fórmula | Columnas | Usa |
+| Métrica | Definición / Fórmula | Columna(s) | Áreas que la usan |
 |---|---|---|---|
-| Ingreso bruto | `Σ ingreso_bruto` (= cantidad × precio_unitario) | `ingreso_bruto` | A2 |
-| Ingreso neto | `Σ monto_neto` | `monto_neto` | Todos |
-| Monto de descuento | `Σ monto_descuento` | `monto_descuento` | A2, A4 |
-| Margen bruto | `Σ margen_bruto` (= monto_neto − cantidad × costo) | `margen_bruto` | A2 |
-| Margen bruto % | `Σ margen_bruto / Σ monto_neto` | — | A2 |
-| Margen neto de devoluciones | `Σ margen_neto_devol` (margen = 0 si la venta fue devuelta) | `margen_neto_devol` | A2, A3 |
-| Ingreso neto final | `Σ monto_neto_final` (= monto_neto − monto_devuelto) | `monto_neto_final` | A3 |
-| Ticket promedio | `Σ monto_neto / nº de transacciones` | `monto_neto`, `transaccion_id` | A2, A5 |
-| % ventas bajo costo | `mean(venta_bajo_costo)` | `venta_bajo_costo` | A2 |
+| **Clientes Activos** | Clientes con al menos 1 transacción en el periodo evaluado | `cliente_id` | A2, A3 |
+| **Antigüedad Real** | Días desde `fecha_alta_efectiva` hasta el corte 2024-12-31 | `antiguedad_dias` | A2 |
+| **Recencia** | Días transcurridos desde la última compra hasta 2024-12-31 | `recencia_dias` | A3 |
+| **Cadencia de Recompra** | Distribución de días entre compras consecutivas del mismo cliente | — | P50=40d, P75=87d, P85=127d, P90=162d |
+| **Cliente en Churn** | Cliente activo con `recencia_dias > N días` (Umbral calibrado) | `recencia_dias` | A2 (CLV), A3 (Fugas) |
+| **Tasa de Churn Anual** | Clientes en churn / Total clientes con historial de compra | — | A2, A3 |
+| **CLV Histórico** | Margen bruto total acumulado que el cliente ya dejó | `margen_total` | A2, A3 |
+| **CLV Estimado (Futuro)** | `Margen Anual Promedio × Vida Esperada (1 / Churn Anual)` | — | A2 (Tope de vida: 3 años) |
+| **Fuga Proyectada (6m)** | `(Gasto del cliente en los últimos 12 meses calendario / 12) × 6` | `monto_neto` | A3 (Solo clientes en Churn) |
 
-### 2.2 Clientes (`clean.clientes` + `clean.transacciones`)
-
-| Métrica | Fórmula | Columnas | Usa |
-|---|---|---|---|
-| Clientes activos (periodo) | Clientes distintos con ≥ 1 compra en el periodo | `cliente_id`, `fecha` | A2, A3 |
-| Frecuencia | `nº transacciones / clientes activos` en el periodo (anualizada) | — | A2, A3 |
-| Recencia | `recencia_dias` (= FIN − ultima_compra) | `recencia_dias` | A3 |
-| Antigüedad | `antiguedad_dias` (desde `fecha_alta_efectiva`, **no** `fecha_registro`) | `antiguedad_dias` | A2 |
-| Churn (cliente inactivo) | `recencia_dias > N` | `recencia_dias` | A2, A3 |
-| Tasa de churn | clientes en churn / clientes con ≥ 1 compra | — | A2, A3 |
-| CLV histórico | `Σ margen_bruto` acumulado del cliente | `margen_total` | A2 |
-| CLV estimado | margen promedio por compra × compras por año × vida esperada | ver §3.2 | A2, A3 |
-| Ingresos en riesgo a 6 meses | Σ (ingreso mensual promedio histórico × 6) de clientes en churn o en riesgo | `monto_total`, `antiguedad_dias` | A3 |
-
-### 2.3 Devoluciones y CRM
-
-| Métrica | Fórmula | Columnas | Usa |
-|---|---|---|---|
-| Tasa de devolución (transacciones) | `mean(devuelto)` | `devuelto` | A3 |
-| Tasa de devolución (monto) | `Σ monto_devuelto / Σ monto_neto` | `monto_devuelto` | A3 |
-| Clientes reincidentes en devolución | Clientes con `n_devoluciones ≥ k` (k a definir con la distribución) | `n_devoluciones` | A3 |
-| Quejas sin resolver | `n_quejas_sin_resolver` por cliente | `clean.clientes` | A3, A4 |
-| Tiempo de respuesta | Mediana de `tiempo_respuesta_hrs` (mediana por los outliers > 168 h) | `clean.interacciones_crm` | A3 |
-
-### 2.4 Marketing (`clean.campanas_marketing`)
-
-| Métrica | Fórmula | Columnas | Usa |
-|---|---|---|---|
-| Tasa de apertura | `mean(abierto)` | `abierto` | A4 |
-| Conversión declarada (oficial) | `mean(convertido)` | `convertido` | A4 |
-| Conversión validada 30 días | `mean(convertido_validado_30d)` | `convertido_validado_30d` | A4 |
-| Costo implícito del descuento | `descuento_ofrecido × monto_compra_30d` (solo campañas convertidas) | `descuento_ofrecido`, `monto_compra_30d` | A4 |
-| ROI de campaña | `(ingreso atribuido − costo del descuento) / costo del descuento` | `monto_compra_30d` | A4 |
+> 📌 **Regla de Proyección a 6 meses:** Debe dividirse entre los 12 meses calendario completos (no solo los meses con compras), evitando inflar artificialmente la proyección. Para no duplicar fugas, se cruza por `cliente_id` entre Churn y quejas de CRM.
 
 ---
 
-## 3. Decisiones pendientes (hay que poder defenderlas en la oral)
+### 2.3 Devoluciones y CRM (`clean.devoluciones` + `clean.interacciones_crm`)
 
-### 3.1 Umbral de churn (N días)
-- **No se fija a ojo:** se obtiene de la distribución de días entre compras consecutivas de cada cliente.
-- Referencia: ~50.000 transacciones / ~8.000 clientes ≈ 6 compras en 2 años ≈ una cada ~115 días.
-- Regla propuesta: **N = percentil 90 del intervalo entre compras** (se espera entre 120 y 240 días).
-- Responsable de proponerlo: A3. Lo usa también A2 (CLV).
-
-### 3.2 Fórmula del CLV estimado
-- `CLV = margen promedio por compra × compras por año × vida esperada (años)`
-- `vida esperada = 1 / tasa de churn anual`, con **tope de 3 años** para no inflar el valor.
-- Se calcula por segmento. Para detectar **segmentos en declive** se compara el CLV (o el margen
-  por cliente activo) entre semestres o entre 2023 y 2024.
-- Limitación: 24 meses de historia; el CLV es una estimación simple, no un modelo probabilístico.
-
-### 3.3 Qué es un "ticket"
-- En los datos, cada `transaccion_id` tiene **un solo producto**: es una línea de venta, no una canasta.
-- Opción A: ticket = promedio de `monto_neto` por transacción (simple, es lo que usa el notebook A1).
-- Opción B: canasta = `cliente_id + fecha + canal`; ticket = promedio por canasta.
-- Hay que elegir una y declararla, porque el enunciado habla de una caída del ticket del 8%.
-
-### 3.4 Devoluciones al final del periodo
-- Las ventas de los últimos 30 días todavía no tuvieron tiempo de ser devueltas
-  (`ventana_devol_incompleta = 1`).
-- Al calcular la tasa del último trimestre, **excluir esas ventas** o declararlo como sesgo.
-
-### 3.5 Conversión oficial
-- Decidido en A1: se usa `convertido` (declarada), porque define la cifra del caso (22% → 11%).
-- Se reporta también la validada a 30 días como prueba de robustez y como limitación del dato.
-
----
-
-## 4. Uso en el dashboard
-
-- **Fila superior (KPIs):** ingreso neto, margen bruto %, ticket promedio, tasa de devolución,
-  conversión — cada uno con su variación 2024 vs. 2023.
-- **Cada sección baja por una rama del árbol** (rentabilidad, fugas, marketing).
-- Límite del enunciado: máximo 10 visualizaciones con título en forma de insight.
-
----
-
-## 5. Registro de cambios
-
-| Fecha | Cambio | Autor | Revisado por |
+| Métrica | Definición / Fórmula | Columna(s) | Áreas que la usan |
 |---|---|---|---|
-| 2026-10-23 | Propuesta inicial | Daniel (con asistencia de IA) | — |
+| **Tasa Devolución (Trx)** | `COUNT(devoluciones) / COUNT(transacciones elegibles)` | `devuelto` | A3 (Global: 13.45%) |
+| **Tasa Devolución ($)** | `Σ monto_devuelto / Σ monto_neto` | `monto_devuelto` | A3 (Global: 14.57%) |
+| **Ventana Incompleta** | Compras con `fecha > 2024-12-01` (aún en plazo legal de 30d) | `ventana_devol_incompleta` | A3 (Excluir o reportar) |
+| **Cliente Reincidente** | Cliente con $\ge 2$ devoluciones en su historial | `n_devoluciones` | A3 (1,711 clientes) |
+| **Queja No Resuelta** | Interacción tipo queja con `resolucion IN ('sin_resolver', 'escalado')` | `resolucion` | A3 |
+| **Impacto de Quejas** | Comparación de compras pre y post queja en ventana simétrica $W$ | `fecha` | A3 (Comparando vs Quejas Resueltas) |
+
+---
+
+### 2.4 Marketing y ROI (`clean.campanas_marketing`)
+
+| Métrica | Definición / Fórmula | Columna(s) | Áreas que la usan |
+|---|---|---|---|
+| **Conversión Declarada** | % de campañas marcadas `convertido = 1` por la plataforma | `convertido` | A4 (Métrica oficial del caso) |
+| **Conversión Validada** | % con compra real trazable del cliente en los 30 días posteriores | `convertido_validado_30d` | A4 (Prueba de robustez ~2%) |
+| **Atribución Única (Deduplicada)** | Si un cliente tuvo varias campañas antes de comprar, se atribuye solo a la última | — | A4 (Evita duplicar ingresos) |
+| **Exclusión de Cola** | Campañas enviadas después de 2024-12-01 (no tienen 30 días de observación) | `fecha_envio` | A4 (358 campañas fuera) |
+| **Costo Implícito Descuento** | `descuento_ofrecido × monto_compra_30d` (en campañas convertidas) | — | A4 |
+| **ROI Estimado de Campaña** | `(Ingreso Atribuido Deduplicado − Costo Descuento) / Costo Descuento` | — | A4 (Reportar como asociación atribuida) |
+
+---
+
+## 3. Contraste Empírico: Datos Reales vs. Enunciado del Caso
+
+Al explorar los datos reales de `clean`, encontramos las siguientes correspondencias exactas con la problemática planteada por la Gerencia:
+
+| Indicador del Problema | Lo que dice el Enunciado | Lo que demuestran los Datos Reales | Hallazgo para el Storytelling (A5) |
+|---|---|---|---|
+| **Caída del Ticket Promedio** | "Caída del 8% interanual" | **$351.29 (2023) ➔ $344.49 (2024)** (Caída de −1.9% por línea de venta) | La caída por producto es leve (−1.9%), pero la caída del margen neto es mayor por el exceso de descuentos online. |
+| **Tasa de Devoluciones** | "Subió al 14% en el último trimestre" | **13.45% global / 13.46% en Q4-2024** | La tasa se mantiene en niveles críticos (~13.5%), concentrada fuertemente en Ropa (21.8%) y Electrónica (17.6%). |
+| **Deterioro del Marketing** | "Efectividad cayó de 22% a 11% en 18 meses" | **11.3% (Q1-2023) ➔ 5.6% (Q4-2024)** | La efectividad **se redujo exactamente a la mitad** en los datos. La tendencia del dolor se cumple de forma idéntica. |
+
+---
+
+## 4. Las 4 Decisiones Exactas para Completar A2, A3 y A4
+
+Para tener el 100% de los notebooks cerrados sin duplicaciones, el equipo solo debe acordar estos 4 parámetros:
+
+### 1. Umbral de Churn ($N$ días de inactividad) ➔ *Afecta A2 (CLV) y A3 (Fugas)*
+* **Situación:** La mediana es 40 días, pero el P85 es 127 días y el P90 es 162 días.
+* **Propuesta recomendada:** Fijar el corte en **120 o 160 días** (o adoptar el semáforo: 40d atención, 120d riesgo, 160d crítico). 
+* **Impacto en A2:** La tasa de abandono anual resultante define la vida útil esperada ($1 / \text{churn}$) para el CLV.
+
+### 2. Criterio de Quejas No Resueltas en CRM ➔ *Afecta A3 (Fugas)*
+* **Situación:** En el borrador solo se tomó `sin_resolver` (499 quejas).
+* **Propuesta recomendada:** Incluir también `escalado` (`{'sin_resolver', 'escalado'}`), ya que una queja escalada sin cierre representa insatisfacción no resuelta para el cliente.
+
+### 3. Métrica Oficial de Conversión de Campañas ➔ *Afecta A4 (Marketing)*
+* **Situación:** La conversión declarada por la plataforma es 9.0% (baja de 11.3% a 5.6%), mientras que la conversión validada con compras es 2.0%.
+* **Propuesta recomendada:** Usar la **conversión declarada como métrica principal** (es la que mide el dolor del caso) y reportar la **validada a 30 días como auditoría técnica de calidad**.
+
+### 4. Regla de Atribución y Ventana para ROI ➔ *Afecta A4 (Marketing)*
+* **Situación:** Varios envíos de campañas coinciden con la misma compra de un cliente en 30 días.
+* **Propuesta recomendada:** Aplicar regla de **atribución al último contacto (Last-Touch)** para no duplicar ventas, y **excluir los envíos de diciembre 2024** por tener ventana de observación incompleta.
+
+---
+
+## 5. Historial de Versiones
+* **v1.0 (2026-10-23):** Propuesta inicial de árbol de métricas y diccionario de campos.
+* **v2.0 (2026-10-23):** Incorporación de corrección de meses calendario para proyección a 6m, reglas de deduplicación de campañas, separación de descuentos aplicados vs ofrecidos y alineación de los 4 acuerdos de equipo.
