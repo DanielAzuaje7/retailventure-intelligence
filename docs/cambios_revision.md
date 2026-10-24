@@ -86,3 +86,8 @@ Rama: `revision-externa-a2-a4`.
 | C15 | Combinaciones analizadas | tipo × canal × segmento (24 de 25 con ≥ 100 envíos) | tipo × segmento (24 de 25) y canal × segmento (19 de 20); cada tipo usa un único canal | A4 |
 | C15 | Conversión validada por segmento | calculada con todos los envíos: Nuevo 0.43%, Inactivo 0.16% | con ventana completa: Nuevo 0.45%, Inactivo 0.17% | A4 |
 | C15 | Segmentos que reciben campañas y no convierten | Nuevo e Inactivo, 24.6% de los envíos, sin datos de respaldo para la hipótesis | Nuevo e Inactivo, 24.6%; compran en 30 días 5.80% y 3.30%; mismo descuento (12.30% vs 12.47%); declarada 24× y 32× la validada | A4 |
+| C16 | Ventana del gasto para ingreso en riesgo (texto) | "12 meses activos" | "12 meses calendario" (parámetro y comentario) | A3 |
+| C16 | Indicador principal del resumen ejecutivo | intervalo mediano entre compras (40 días) | 2,407 clientes en riesgo (31.6%) e ingreso en riesgo a 6 meses $635,911.35 | A3 |
+| C16 | Ingreso en riesgo con el método anterior (meses con compras) | "$12.7M" escrito a mano | $3,118,914.07 (calculado; 2.3 meses con compra de 12 en promedio) | A3 |
+| C16 | Clientes en riesgo con queja no resuelta (solape en A3.4) | 222 (solo quejas con ventana completa) | 246 (todas las quejas no resueltas, igual que el cruce de C6) | A3 |
+| C16 | Decisión de quejas no resueltas | "pendiente de validar" en el markdown | opción B adoptada (`sin_resolver` + `escalado`) | A3 |
