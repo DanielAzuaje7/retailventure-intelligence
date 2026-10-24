@@ -16,3 +16,13 @@ Rama: `revision-externa-a2-a4`.
 | C2 | Compras atribuidas: push_reactivacion / email_descuento / sms_oferta_flash / email_fidelizacion / social_ads | 445 / 753 / 332 / 446 / 200 | 436 / 738 / 323 / 430 / 195 | A4 |
 | C2 | Retorno bruto de ingreso por tipo (mismo orden) | 8.11 / 7.92 / 7.89 / 7.99 / 7.35 | 8.12 / 7.93 / 7.86 / 8.01 / 7.26 | A4 |
 | C2 | Retorno bruto de margen por tipo (mismo orden) | 2.07 / 2.00 / 1.97 / 1.94 / 1.88 | 2.06 / 1.99 / 1.97 / 1.93 / 1.88 | A4 |
+| C1 | Retorno bruto global de ingreso | 7.91 | 7.90 (= 1 / 12.654%, verificado en la celda de identidad) | A4 |
+| C1 | Retorno bruto global de margen | no se imprimía | 1.98 (= margen % / descuento medio) | A4 |
+| C1 | Tasa de compra de referencia | no existía en 066777b; en `main`: 20.40% (30 días previos al envío) | 21.17% (mismo cliente, bloques de 31 días sin campaña) | A4 |
+| C1 | Tasa de compra post-envío | en `main`: 20.18% (solo compras last-touch del envío) | 20.85% (cualquier compra, envíos con referencia) | A4 |
+| C1 | Lift incremental global | en `main`: −0.22 p.p., IC [−1.23, +0.87] | −0.32 p.p., IC [−1.25, +0.59] (incluye 0) | A4 |
+| C1 | Lift por tipo: email_descuento / email_fidelizacion / push_reactivacion / sms_oferta_flash / social_ads | en `main`: −0.13 / +0.35 / −1.37 / +0.23 / −0.12 p.p. | −1.03 / +0.14 / −0.02 / +0.24 / −0.19 p.p. (todos los IC incluyen 0) | A4 |
+| C1 | Margen incremental | en `main`: −11,953.66 (margen post − margen pre) | −2,282.24, IC [−8,929.52, +4,367.54] (lift × envíos × margen por compra) | A4 |
+| C1 | ROI incremental global | en `main`: −1.13, IC [−1.35, −0.94] | −1.03, IC [−1.10, −0.95] (no incluye 0; incluye −1) | A4 |
+| C1 | ROI incremental por tipo (mismo orden) | en `main`: −1.09 / −0.96 / −1.29 / −1.11 / −1.33 | −1.08 / −0.99 / −1.00 / −0.98 / −1.02 | A4 |
+| C1 | IC 95% del lift frente a nunca contactados | [−1.86, +0.33] (1,000 réplicas) | [−1.91, +0.27] (2,000 réplicas) | A4 |
