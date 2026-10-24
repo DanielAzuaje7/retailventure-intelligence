@@ -101,3 +101,6 @@ Rama: `revision-externa-a2-a4`.
 | C20 | Margen del top 20% de clientes | 56.1% (leía la fila del cliente 1,522) | 56.0% (1,521 clientes) | A2 |
 | C20 | Clientes que concentran el 80% del margen | 2,893 (índice, no conteo) | 2,894 = 38.0% de los 7,608 con compras (36.2% sobre los 8,000) | A2 |
 | C20 | Aclaración del denominador | markdown con 7,608 / 8,000 / 392 escritos a mano | markdown sin cifras; conteos impresos y en el eje X | A2 |
+| C21 | Escenarios de fuga a 6 meses | solo escenario máximo: $635,911.35 (se pierden todos los clientes en riesgo) | máximo $635,911.35; esperado $129,796.66 (rango $119,881.76 a $147,939.08), 20.4% del máximo | A3 |
+| C21 | No retorno al corte 30/06/2024 con C+B (nuevo) | no existía | 52.5% global; Premium 0.0%, Frecuente 6.41%, Esporádico 42.50%, Nuevo 80.38%, Inactivo 100% | A3 |
+| C21 | No retorno con más de 90 días sin comprar (nuevo) | no existía | volvió 98.6% de Premium y 93.5% de Frecuente; no volvió 82.4% de Nuevo y 100% de Inactivo; ningún umbral de días llega al 80% (máximo 64.5%) | A3 |
