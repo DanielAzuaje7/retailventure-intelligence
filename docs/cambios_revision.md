@@ -75,3 +75,10 @@ Rama: `revision-externa-a2-a4`.
 | C13 | Tasa con ventana de devolución incompleta | 13.45% igual a la global, sin explicación | 13.43% vs 13.45%; 158 de 276 devoluciones fechadas el 2024-12-31 (fechas recortadas en origen) | A3 |
 | C13 | Texto de Ropa | "mayor TASA (0.0%), dominada por Talla_incorrecta y No_cumple_expectativas" | 21.78%; motivos principales Producto_defectuoso 28.3% y No_cumple_expectativas 22.7% | A3 |
 | C13 | Motivo × categoría sin Talla_incorrecta (nueva) | no existía | Chi2 = 84.66, p < 0.001 | A3 |
+| C14 | Tasa de churn usada en el CLV | fijada a mano: 10% / 15% / 28% / 35% / 85% (Premium / Frecuente / Esporádico / Nuevo / Inactivo), origen no trazable | retención observada 2023 → 2024: 100.0% / 99.29% / 77.68% / 32.03% / 0.0% | A2 |
+| C14 | CLV Premium | 4,178.77 (perpetuidad con churn 10%) | 2,052.59 (margen 2023) → 2,104.20 (margen 2024), 3 años | A2 |
+| C14 | CLV Frecuente | 1,760.50 | 1,100.04 → 1,089.03 | A2 |
+| C14 | CLV Esporádico | 318.79 | 297.05 → 299.21 | A2 |
+| C14 | CLV Nuevo | 125.06 | 113.25 → 124.40 | A2 |
+| C14 | CLV Inactivo | 46.42 | 82.14 → 78.17 | A2 |
+| C14 | Segmentos en declive (nuevo) | no se identificaban | Frecuente (clientes −0.08%, margen/cliente −1.00%) e Inactivo (−2.47%, −4.83%) | A2 |
