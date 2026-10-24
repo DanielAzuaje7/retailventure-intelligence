@@ -1,0 +1,115 @@
+<USER_REQUEST>
+Mira, estas correcciones las envio una IA. Quiero que chequees si tienen sentido antes de aplicar cualquier cosa, como te digo no estoy seguro si esto esta bien o no así que justifica tu respuesta en caso de no estar de acuerdo o explicame el porque de cada cosa. Luego de tu analisis veremos si aplican o no
+
+REVISIÓN EXTERNA DE A2, A3 Y A4: CORRECCIONES A APLICAR
+
+REGLAS DE TRABAJO (aplican a todo)
+1. Aplica las correcciones una por una, en el orden dado. Tras cada una: ejecuta el notebook completo, muestra la salida real y resume SOLO lo que esa salida muestra. Copia los números desde la salida; no los escribas de memoria.
+2. Si el resultado contradice la narrativa actual, cambia la narrativa, no el análisis. Los resultados nulos se reportan como nulos.
+3. No cambies las decisiones del equipo (NO_RESUELTAS = sin_resolver + escalado, churn relativo C+B, atribución a 30 días, exclusión de diciembre 2024) sin preguntarme antes.
+4. Distingue siempre asociación de causalidad. Evita "demuestra", "causa raíz", "análisis causal", "colapso" salvo que una prueba lo respalde.
+5. Por cada corrección, agrega una entrada en docs/bitacora_ia.md con: qué se cambió, por qué, y cómo se validó (qué se ejecutó y qué dio). Si algo no se pudo verificar, escribe "Pendiente".
+
+=== PRIORIDAD ALTA ===
+
+C1. A4, ROI (celda de ROI y resumen ejecutivo)
+Problema: con costo = descuento x monto atribuido, roi_ingreso = monto / (d x monto) = 1 / descuento medio ponderado. Verificación: 92,794.78 / 733,832.74 = 12.645 %, y 1 / 0.12645 = 7.91, que es exactamente el ROI global reportado. Igual, roi_margen = margen % / descuento %. Las diferencias entre tipos (1.88x a 2.07x) reflejan el descuento medio de cada tipo, no la efectividad. Además, se atribuyen 2,176 compras a 8,450 campañas (0.2575 por campaña a 30 días), casi igual al ritmo base de cualquier cliente sin campaña: 50,000 / (8,000 x 24) = 0.2604 por cliente-mes. Es decir, se está contando como de la campaña lo que habría ocurrido igual.
+Corrección: (a) conserva la tabla del enunciado, pero rotúlala "retorno bruto, no incremental" y explica la identidad en una celda de texto. (b) Agrega un análisis de efecto incremental: compara la tasa de compra en los 30 días posteriores al envío contra una referencia sin campaña del mismo cliente (por ejemplo, ventanas de 30 días sin campañas previas) o contra clientes no contactados en esa ventana. Reporta el lift por tipo de campaña con intervalo de confianza bootstrap (el cliente es la unidad de remuestreo). (c) Calcula ROI incremental = (margen incremental - costo del descuento) / costo del descuento. Si el intervalo incluye 0, dilo explícitamente.
+
+C2. A4, atribución "Last-Touch"
+Problema: el código atribuye cada compra a TODAS las campañas enviadas en los 30 días previos (cada campaña busca sus compras de forma independiente). Eso no es last-touch y duplica compras.
+Corrección: asigna cada transacción a la campaña más reciente del mismo cliente enviada hasta 30 días antes de la compra (por ejemplo, con pd.merge_asof por cliente). Reporta cuántas transacciones estaban antes en más de una campaña y recalcula todos los totales y el ROI. Mantén la exclusión de diciembre 2024.
+
+C3. A4.3, fricción operativa
+Problema: la salida del notebook muestra 17.50 % (nunca convirtieron) vs 17.75 % (sí convirtieron) en clientes con quejas; 5.71 % vs 5.15 % en quejas no resueltas; 44.95 % vs 44.58 % con devoluciones. No hay diferencia. La narrativa afirma que la causa raíz es post-venta y el resumen previo reportó "7.5 %" para los convertidores, que no coincide con el notebook.
+Corrección: (a) agrega una prueba de diferencia de proporciones (chi-cuadrado o z con intervalo de confianza) para cada indicador. (b) Reescribe el texto de A4.3, el título del gráfico y la fila 14 del resumen para que reflejen que NO hay diferencia. (c) Elimina "diagnosticar la causa raíz del fracaso publicitario" y "el problema es post-venta". (d) Propón hipótesis alternativas respaldadas por datos: composición por segmento (Nuevo e Inactivo), nivel de descuento, y confiabilidad del flag convertido. (e) Aclara que este resultado es coherente con A3, donde las quejas no resueltas no reducen las compras.
+
+C4. A4.2, saturación de descuentos
+Problema: la matriz segmento x descuento no muestra saturación en >20 %. Frecuente sube de 9.6 a 11.0 y Nuevo de 10.3 a 15.2 al pasar de 20 % a 25 %. Solo Esporádico baja (12.0 a 10.4), sin prueba ni tamaño de muestra por celda. El título "Punto de saturación en >20%" y el sombreado no están respaldados.
+Corrección: (a) muestra el n de cada celda. (b) Repite la matriz con la conversión validada a 30 días, además de la declarada. (c) Ajusta una regresión logística (statsmodels) con convertido ~ descuento + segmento + tipo_campana; reporta odds ratios con IC 95 % y p-valores. (d) Contrasta específicamente 25 % vs 20 %, controlando por segmento. (e) Si no hay diferencia significativa, reescribe como "rendimientos decrecientes posibles, no concluyente" y quita el título y el sombreado de saturación. Actualiza la fila 13 del resumen.
+
+C5. A4.1, calidad del flag convertido y tendencia
+Problema: solo 179 de 797 conversiones declaradas (22.5 %) tienen una compra en 30 días, que es casi el ritmo base. El flag declarado parece no informar sobre compras reales. La conversión validada cae de 2.91 % a 1.29 % (-56 %) y la declarada de 11.8 % a 6.4 % (-46 %). Por segmento, Nuevo tiene 10.61 % declarada vs 0.43 % validada, e Inactivo 5.49 % vs 0.16 %.
+Corrección: (a) calcula P(compra en 30 días | convertido=1) vs P(compra en 30 días | convertido=0) y reporta si difieren. (b) Muestra tendencia semestral y trimestral con ambas métricas. (c) Rehace la comparación por tipo y segmento también con la validada. (d) Descompón la caída por semestre x segmento y tipo para ver si cambió la mezcla de envíos o si cae dentro de cada grupo. (e) Cambia "coherente con el 22 % a 11 % del enunciado" por una frase honesta: los niveles difieren (el notebook parte de 11.8 %), pero la caída relativa es de magnitud similar.
+
+C6. A3.2, quejas y compras posteriores
+Problema: el cambio de compras tras quejas no resueltas es -0.010 y tras quejas resueltas es -0.022: las no resueltas cayeron menos. En la sensibilidad, el signo de la diferencia cambia según la ventana (0.5W: -0.002 vs +0.001; 1.0W: -0.010 vs -0.022; 1.5W: -0.022 vs -0.014). No hay efecto detectable y no hay prueba estadística.
+Corrección: (a) calcula la diferencia en diferencias (delta de no resueltas menos delta de resueltas) con IC 95 % bootstrap por cliente y p-valor. (b) Excluye las quejas cuya ventana queda truncada por los bordes del período (fecha < INICIO + W o fecha > FECHA_CORTE - W) y reporta cuántas se excluyen. (c) Reescribe la conclusión: "no se detecta efecto de las quejas no resueltas sobre la frecuencia de compra". (d) Agrega: de los 2,407 clientes en riesgo, 246 (10 %) tienen una queja no resuelta; compara con el porcentaje entre los clientes que no están en riesgo, con prueba de proporciones.
+
+C7. A2, supuesta explicación del -8 % del ticket
+Problema: el notebook afirma que la caída del 8 % "está concentrada exactamente en el segmento Inactivo". El ticket global cayó solo -1.94 % (351.29 a 344.49). Inactivo tiene unas 440 transacciones por año (menos del 2 % del total), así que su variación mueve el ticket global unos 0.15 puntos. Coincidir con -8.03 % no explica nada, y no hay prueba de significancia.
+Corrección: (a) elimina la afirmación de que el misterio quedó resuelto. (b) Reporta que los datos no reproducen el -8 % del enunciado. (c) Descompón la variación del ticket en efecto precio y efecto mezcla por segmento, categoría y canal. (d) Agrega una prueba (Welch o bootstrap) para la variación por segmento y reporta el n. (e) Agrega la evolución trimestral del ticket.
+
+C8. A2.3, estacionalidad
+Problema: la gráfica sombrea "Pico Q4 (Black Friday/Navidad)" y "Valle Q1", pero en los datos noviembre 2024 es un valle y enero 2024 es alto. 2023 y 2024 no repiten el patrón. El eje (650-800 mil) exagera la variación. Además, el enunciado pide estacionalidad por categoría y por canal; solo existe por canal.
+Corrección: (a) quita los sombreados y rótulos. (b) Calcula un índice estacional (ingreso del mes / promedio del año) para 2023 y 2024, y la correlación entre ambos años. (c) Repite el cálculo por categoría y por canal (matriz mes x categoría y mes x canal). (d) Concluye pico o valle solo donde el patrón se repite en ambos años. (e) Si no hay estacionalidad consistente, dilo.
+
+C9. A2.4, descuentos y "demanda inelástica"
+Problema: "unidades por ticket" (1.78 en todos los tramos) mide el tamaño de la canasta, no la elasticidad. Además, la conclusión se contradice con A4, donde el descuento sí sube la conversión. Y los descuentos no se asignan al azar (online tiene el doble).
+Corrección: (a) renombra la métrica como "tamaño de canasta". (b) Ajusta regresiones con control por categoría y canal: margen % ~ descuento y unidades ~ descuento. (c) Reporta también transacciones por mes según tramo de descuento. (d) Mantén el cálculo del punto de equilibrio. (e) Reescribe la conclusión: "no hay evidencia de que el descuento aumente las unidades por ticket", y concilia con A4 en un párrafo: el descuento influye en la decisión de comprar (conversión), no en el tamaño de la canasta. (f) Elimina "demostró empíricamente" y "demanda inelástica".
+
+C10. A2.1, "Cruce Causal" canal x categoría
+Problema: es una tabla cruzada descriptiva, no un análisis causal.
+Corrección: (a) renómbralo "Cruce descriptivo". (b) Agrega un contrafactual: margen del canal online si tuviera el descuento promedio de tienda en cada categoría, en puntos porcentuales y en dólares (referencia: la diferencia actual es 26.02 % - 22.78 % = 3.24 pp sobre 6,547,309 de ingreso, unos 212 mil). (c) Presenta ese monto como tope, porque supone volumen constante.
+
+=== PRIORIDAD MEDIA ===
+
+C11. A3.1, devoluciones por producto
+Problema: se ordena por monto devuelto, lo que refleja el precio y las ventas, no la anomalía. El enunciado pide tasas anómalas.
+Corrección: calcula la tasa de devolución por producto (mínimo 30 transacciones), compárala con la de su categoría con intervalo de Wilson o prueba binomial, aplica corrección por comparaciones múltiples (Benjamini-Hochberg) y lista los productos con exceso significativo. Conserva el ranking por monto como complemento.
+
+C12. A3.1, "clientes recurrentes en devoluciones"
+Problema: 1,711 clientes con 2 o más devoluciones representan el 70.7 % de las devoluciones. Pero con una probabilidad de 13.45 % por compra y unas 6.6 compras por cliente, el azar predice alrededor de 1,700 clientes así. La medida refleja base-rate (los clientes que más compran devuelven más veces), no un comportamiento anómalo.
+Corrección: calcula devoluciones / compras por cliente; compara con lo esperado bajo un modelo binomial con p = 13.45 % y n = compras del cliente; marca como recurrentes anómalos solo los que excedan (por ejemplo, p < 0.01, o 3+ devoluciones con tasa de al menos 40 % y 4+ compras). Reporta observados vs esperados.
+
+C13. A3.1, tendencia de devoluciones
+Problema: el enunciado dice que la tasa subió a 14 % en el último trimestre. El notebook no mira la tendencia (global 13.45 %).
+Corrección: tasa de devolución por mes y trimestre con IC; indica si hay aumento o no. Agrega la distribución de `motivo` por categoría, especialmente Electrónica (55 % del dinero devuelto) y Ropa (21.8 % de tasa).
+
+C14. A2.2, segmentos en declive y CLV
+Problema: el enunciado pide detectar segmentos en declive. El notebook solo compara el ticket. El CLV usa la misma vida de 3 años para todos los segmentos, así que solo refleja el margen histórico. Además, el segmento se asigna según el comportamiento final, por lo que Inactivo tiene bajo CLV por definición (circularidad).
+Corrección: (a) tabla 2023 vs 2024 por segmento: clientes activos, frecuencia, margen por cliente activo. (b) Usa tasas de churn por segmento (de A3) para la vida esperada, o aclara la limitación por escrito. (c) Agrega una nota sobre la circularidad de la etiqueta de segmento.
+
+C15. A4.1, canal de campaña y combinaciones
+Problema: el enunciado pide conversión por tipo, canal de envío y segmento, y qué combinaciones dan mayor retorno. No se analiza `canal_campana` ni combinaciones.
+Corrección: tabla de conversión (declarada y validada) por tipo, canal y segmento, y combinaciones tipo x segmento y canal x segmento (mínimo 100 envíos), con IC. Identifica explícitamente el segmento que recibe campañas y no convierte (Nuevo e Inactivo reciben aprox. 25 % de los envíos con 0.43 % y 0.16 % de conversión validada) y propón hipótesis respaldadas por datos.
+
+=== PRIORIDAD BAJA / TEXTO ===
+
+C16. A3, textos desactualizados
+La sección 12 dice que el umbral base es 40 días y que solo se contempla `sin_resolver`; el código usa churn relativo C+B (P85 = 127 días) y `escalado`. En parámetros, "12 meses activos" debe decir "12 meses calendario". El resumen ejecutivo muestra el intervalo mediano de 40 días como indicador principal; reemplázalo o complétalo con el churn real (2,407 clientes, $635,911.35 a 6 meses). Revisa todo el markdown para que concuerde con el código.
+
+C17. Conclusiones escritas antes del análisis y números a mano
+Reescribe los objetivos de A2 y A4 como preguntas, no como conclusiones. Quita "demostrando empíricamente", "análisis causal exhaustivo", "Colapso de la Conversión", "Cruce Causal" y similares. Reemplaza los números escritos a mano en el markdown y en las leyendas ("4,062 cli", "738 cli", "$351.29", "-8.03 %", etc.) por valores calculados con f-strings.
+
+C18. A2, promedios de porcentajes sin ponderar
+Las tablas cruce_margen y sub_summary promedian margen_pct_real por transacción. Usa suma de margen / suma de ingreso, como en el resto del notebook.
+
+C19. Fuente de datos
+A2 y A4 leen CSV locales; A3 lee clean desde Supabase. Unifica A2 y A4 para leer de Supabase (DATABASE_URL en .env), o documenta por qué no.
+
+C20. Pareto
+Aclara que el denominador son los clientes con compras (7,608), no los 8,000.
+
+ENTREGABLE FINAL
+1. Notebooks actualizados y ejecutados sin errores.
+2. Una tabla antes/después con los números que cambiaron.
+3. Entradas nuevas en docs/bitacora_ia.md.
+4. Lista de lo que NO se pudo corregir o verificar, con la razón.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-24T02:23:17-04:00.
+
+The user's current state is as follows:
+Active Document: c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\data\raw\campanas_marketing.csv (LANGUAGE_UNSPECIFIED)
+Cursor is on line: 1
+Other open documents:
+- c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\requirements.txt (LANGUAGE_UNSPECIFIED)
+- c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\scratch\crear_a4_notebook.py (LANGUAGE_PYTHON)
+- c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\data\raw\campanas_marketing.csv (LANGUAGE_UNSPECIFIED)
+- c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\docs\bitacora_ia.md (LANGUAGE_MARKDOWN)
+- c:\Users\danie\OneDrive\Escritorio\retailventure-intelligence\docs\definiciones_metricas.md (LANGUAGE_MARKDOWN)
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Claude Opus 5.5 (Medium) to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
