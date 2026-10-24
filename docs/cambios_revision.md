@@ -55,3 +55,7 @@ Rama: `revision-externa-a2-a4`.
 | C8 | Correlación del índice estacional 2023 vs 2024 | `main`: r = 0.275 sin p-valor | r = 0.275, p = 0.387 | A2 |
 | C8 | Correlación por categoría y canal (nueva para canal) | solo matrices por categoría, sin correlación | 0 de 9 grupos con correlación significativa entre años | A2 |
 | C8 | Eje Y de las gráficas de estacionalidad | 650 a 800 mil (066777b) | desde 0 | A2 |
+| C9 | Nombre de la métrica | "unidades por ticket" / "demanda inelástica" | tamaño de canasta | A2 |
+| C9 | Canasta ~ descuento (OLS con controles) | coef +0.0377, p = 0.6408 (errores clásicos) | coef +0.0377, IC 95% [−0.1218, +0.1972], p = 0.643 (HC1) | A2 |
+| C9 | Margen % ~ descuento (OLS con controles) | coef −82.47, p < 0.001 | coef −82.47, IC 95% [−83.36, −81.59], p < 0.001 (HC1) | A2 |
+| C9 | Punto de equilibrio | 066777b: +227% para 20% (markdown, m ≈ 28.8% a mano); `main`: no existía | 5% → +21.0%, 10% → +53.1%, 15% → +108.6%, 20% → +226.9%, 25% → +655.2% (m = 28.82%, calculado) | A2 |
