@@ -36,3 +36,9 @@ Rama: `revision-externa-a2-a4`.
 | C4 | Contraste 25% vs 20% | bruto 11.42% vs 11.39%, chi-cuadrado p = 1.000 | ajustado por segmento y tipo: OR = 0.993, IC 95% [0.789, 1.249], p = 0.952 | A4 |
 | C4 | Contraste 25% vs 20% con conversión validada (nuevo) | no existía | OR = 1.240, IC 95% [0.779, 1.975], p = 0.364 | A4 |
 | C4 | Conclusión de A4.2 | 066777b: "punto de saturación en >20%"; `main`: "rendimientos decrecientes y estancamiento" | rendimientos decrecientes posibles, no concluyente | A4 |
+| C5 | P(compra 30d \| convertido = 1) vs (= 0) | 22.81% vs 20.45%, sin prueba | +2.36 p.p., IC 95% [−0.72, +5.45], p = 0.121 (no difieren) | A4 |
+| C5 | Variación relativa de la conversión validada (2023-S1 a 2024-S2) | no se imprimía (revisión: −56%) | −55.5%; −50.4% con ventana completa (1.44% en 2024-S2) | A4 |
+| C5 | Descomposición declarada por segmento (nueva) | no existía | −5.43 p.p. = mezcla −0.21 + dentro −5.22 | A4 |
+| C5 | Descomposición declarada por tipo (nueva) | no existía | −5.43 p.p. = mezcla −0.01 + dentro −5.42 | A4 |
+| C5 | Descomposición validada por segmento / tipo (nueva) | no existía | −1.46 p.p. = mezcla −0.22 + dentro −1.24 / mezcla 0.00 + dentro −1.47 | A4 |
+| C5 | Frase frente al enunciado | "confirma de manera precisa una contracción de ~50%" | los niveles difieren (11.8% vs 22%), caída relativa de magnitud similar (−46.0% vs −50%) | A4 |
