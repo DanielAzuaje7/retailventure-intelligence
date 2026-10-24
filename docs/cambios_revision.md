@@ -42,3 +42,7 @@ Rama: `revision-externa-a2-a4`.
 | C5 | Descomposición declarada por tipo (nueva) | no existía | −5.43 p.p. = mezcla −0.01 + dentro −5.42 | A4 |
 | C5 | Descomposición validada por segmento / tipo (nueva) | no existía | −1.46 p.p. = mezcla −0.22 + dentro −1.24 / mezcla 0.00 + dentro −1.47 | A4 |
 | C5 | Frase frente al enunciado | "confirma de manera precisa una contracción de ~50%" | los niveles difieren (11.8% vs 22%), caída relativa de magnitud similar (−46.0% vs −50%) | A4 |
+| C6 | DiD frecuencia (no resueltas − resueltas), W = 40 días | 066777b: −0.010 vs −0.022 sin prueba; `main`: +0.0125, IC [−0.0549, +0.0846] (bootstrap sin reemplazo), t-test p = 0.7848 | +0.0125, IC 95% [−0.0770, +0.1011], p bootstrap = 0.755 | A3 |
+| C6 | Quejas excluidas por ventana truncada (W = 40 días) | no se excluían en 066777b | 221 | A3 |
+| C6 | DiD con ventana 1.5W (60 días) | `main`: +0.0035 (exclusión de 40 días) | −0.0189, IC [−0.1349, +0.1002], p = 0.752 (343 quejas excluidas) | A3 |
+| C6 | Clientes en riesgo con queja no resuelta | `main`: 100 de 1,016 (9.84%) vs 9.03%, p = 0.434 (churn con respaldo P75) | 246 de 2,407 (10.22%) vs 514 de 5,201 (9.88%), p = 0.648 (churn C+B del equipo) | A3 |
