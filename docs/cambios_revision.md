@@ -26,3 +26,9 @@ Rama: `revision-externa-a2-a4`.
 | C1 | ROI incremental global | en `main`: −1.13, IC [−1.35, −0.94] | −1.03, IC [−1.10, −0.95] (no incluye 0; incluye −1) | A4 |
 | C1 | ROI incremental por tipo (mismo orden) | en `main`: −1.09 / −0.96 / −1.29 / −1.11 / −1.33 | −1.08 / −0.99 / −1.00 / −0.98 / −1.02 | A4 |
 | C1 | IC 95% del lift frente a nunca contactados | [−1.86, +0.33] (1,000 réplicas) | [−1.91, +0.27] (2,000 réplicas) | A4 |
+| C3 | Quejas: diferencia sí − nunca convirtieron | 17.50% vs 17.75%, sin prueba en 066777b | +0.25 p.p., IC 95% [−2.75, +3.24], p (z) = 0.871 | A4 |
+| C3 | Quejas no resueltas: diferencia | 5.71% vs 5.15%, sin prueba | −0.56 p.p., IC 95% [−2.31, +1.18], p (z) = 0.542 | A4 |
+| C3 | Devoluciones: diferencia | 44.95% vs 44.58%, sin prueba | −0.37 p.p., IC 95% [−4.27, +3.53], p (z) = 0.851 | A4 |
+| C3 | Conclusión de A4.3 | "la causa raíz es post-venta" | sin diferencia significativa en ningún indicador | A4 |
+| C3 | Segmento × conversión (nueva) | no existía | Chi2 = 46.83, p = 1.65e-09 | A4 |
+| C3 | Devoluciones con conversión validada (nueva) | no existía | 44.01% vs 69.46% (p = 8.2e-11); por cada 100 compras 13.41 vs 12.44 | A4 |
