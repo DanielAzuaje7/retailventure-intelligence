@@ -4,3 +4,8 @@ psycopg[binary]
 python-dotenv
 matplotlib
 seaborn
+statsmodels
+scipy
+nbformat
+nbclient
+ipykernel
